@@ -17,5 +17,9 @@ public class FDtest {
           System.out.println();
       }
 
+     public void test03(){
+     
+      System.out.println("测试03");
+     }
 
 }
