@@ -21,6 +21,7 @@ public class FDtest {
     public void test02() {
 
         System.out.println("Git 测试02");
+        System.out.println("Git 测试002");
         System.out.println("Git 本地测");
     }
 
