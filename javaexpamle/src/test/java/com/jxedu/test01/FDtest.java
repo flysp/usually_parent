@@ -17,9 +17,5 @@ public class FDtest {
           System.out.println();
       }
 
-      @Test
-    public void test02(){
 
-          System.out.println("测试02");
-      }
 }
