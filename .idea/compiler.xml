@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="bplus" />
+        <module name="hellojpa" />
+        <module name="helloweb" />
+        <module name="javaexpamle" />
+        <module name="mapper" />
+        <module name="mavenplugin" />
+        <module name="maventest" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="hello" target="1.8" />
+      <module name="java8" target="1.8" />
+      <module name="mybatisplus" target="1.8" />
+      <module name="myplus" target="1.8" />
+      <module name="plus" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

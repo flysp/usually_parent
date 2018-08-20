@@ -1,0 +1,144 @@
+= spring mvc 中使用swagger2 构建 RESTful API
+
+
+[[_overview]]
+== Overview
+测试中的构建
+
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1.0
+
+
+=== License information
+[%hardbreaks]
+__Terms of service__ : http://localhost
+
+
+=== URI scheme
+[%hardbreaks]
+__Host__ : localhost
+__BasePath__ : /helloweb
+
+
+=== Tags
+
+* hello-controller : Hello Controller
+
+
+
+
+[[_paths]]
+== Resources
+
+[[_hello-controller_resource]]
+=== Hello-controller
+Hello Controller
+
+
+[[_hellousingget]]
+==== hello测试
+....
+GET /hello/{name}
+....
+
+
+===== Description
+hello测试
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|**Path**|**name** +
+__required__|name|string|
+|**Query**|**id** +
+__optional__|id|integer (int64)|`1`
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|string
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Produces
+
+* `application/json;charset=UTF-8`
+
+
+[[_userusingpost]]
+==== 用户
+....
+POST /user
+....
+
+
+===== Description
+user测试
+
+
+===== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**user** +
+__required__|user|<<_1fd02a90c38333badc226309fea6fecb,用户>>
+|===
+
+
+===== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|OK|<<_1fd02a90c38333badc226309fea6fecb,用户>>
+|**201**|Created|No Content
+|**401**|Unauthorized|No Content
+|**403**|Forbidden|No Content
+|**404**|Not Found|No Content
+|===
+
+
+===== Consumes
+
+* `application/json`
+
+
+===== Produces
+
+* `application/json;charset=UTF-8`
+
+
+
+
+[[_definitions]]
+== Definitions
+
+[[_1fd02a90c38333badc226309fea6fecb]]
+=== 用户
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**address** +
+__optional__|用户地址|string
+|**name** +
+__optional__|用户名|string
+|===
+
+
+
+
+

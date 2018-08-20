@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                                          http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+                                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                                           http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+    <jpa:repositories base-package="com.jxedu.dao"/>
+    <context:component-scan base-package="com.jxedu">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--加载配置文件-->
+    <context:property-placeholder location="classpath*:config/druid.properties" file-encoding="UTF-8"
+                                  ignore-resource-not-found="true" ignore-unresolvable="true"/>
+
+    <!--数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1" />
+        <property name="minIdle" value="1" />
+        <property name="maxActive" value="10" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="10000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="testWhileIdle" value="true" />
+
+        <!-- 这里建议配置为TRUE，防止取到的连接不可用 -->
+        <property name="testOnBorrow" value="true" />
+        <property name="testOnReturn" value="false" />
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="20" />
+
+        <!-- 这里配置提交方式，默认就是TRUE，可以不用配置 -->
+
+        <property name="defaultAutoCommit" value="true" />
+
+        <!-- 验证连接有效与否的SQL，不同的数据配置不同 -->
+        <property name="validationQuery" value="select 1 " />
+        <property name="filters" value="stat" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="logFilter" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="statementExecutableSqlLogEnable" value="false" />
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--指定JPA扫描的实体类的包-->
+        <property name="packagesToScan" value="com.jxedu.entity"/>
+        <!--指定持久层提供者为Hibernate-->
+         <property name="persistenceProvider">
+             <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
+         </property>
+        <!-- 指定Jpa持久化实现厂商类,这里以Hibernate为例 -->
+        <property name="jpaVendorAdapter">
+            <!-- Hibernate对Jpa的实现 -->
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                   <!--自动建表-->
+                   <property name="generateDdl" value="true"/>
+                   <property name="database" value="MYSQL"/>
+     <!--             <property name="databasePlatform">
+                       <bean class="org.hibernate.dialect.MySQLDialect"/>
+                  </property>-->
+                  <property name="showSql" value="true"/>
+            </bean>
+        </property>
+        <property name="jpaPropertyMap">
+            <map>
+                 <!--	将Hibernate查询中的符号映射到SQL查询中的符号 (符号可能是函数名或常量名字). 取值 hqlLiteral=SQL_LITERAL, hqlFunction=SQLFUNC-->
+             <!--   <entry key="hibernate.query.substitutions" value="true 1, false 0" />-->
+                <!--为Hibernate关联的批量抓取设置默认数量. 取值 建议的取值为4, 8, 和16-->
+                <entry key="hibernate.default_batch_fetch_size" value="16" />
+                <!--为单向关联(一对一, 多对一)的外连接抓取（outer join fetch）树设置最大深度. 值为0意味着将关闭默认的外连接抓取. 取值 建议在0到3之间取值-->
+                <entry key="hibernate.max_fetch_depth" value="2" />
+                <!--如果开启, Hibernate将收集有助于性能调节的统计数据. 取值 true | false-->
+                <entry key="hibernate.generate_statistics" value="true" />
+                <!--启用字节码反射优化器 默认是禁用的-->
+                <entry key="hibernate.bytecode.use_reflection_optimizer" value="true" />
+                <!--能用来完全禁止使用二级缓存. 对那些在类的映射定义中指定<cache>的类，会默认开启二级缓存. 取值 true|false-->
+               <!-- <entry key="hibernate.cache.use_second_level_cache" value="true" />-->
+                <!--允许查询缓存, 个别查询仍然需要被设置为可缓存的. 取值 true|false-->
+                <entry key="hibernate.cache.use_query_cache" value="true" />
+                <entry key="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"></entry>
+             <!--   <entry key="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE"></entry>-->
+                <!--出所有SQL语句到控制台. 有一个另外的选择是把org.hibernate.SQL这个log category设为debug。 eg. true | false-->
+                <entry key="hibernate.show_sql" value="true"/>
+                <!--  SQL方言-->
+               <!-- <entry key="hibernate.dialect">
+                     <bean class="org.hibernate.dialect.MySQLDialect"></bean>   加上后实体类不能自动建表了
+                </entry>-->
+                <!--在SessionFactory创建时，自动检查数据库结构，或者将数据库schema的DDL导出到数据库. 使用 create-drop时,在显式关闭SessionFactory时，将drop掉数据库schema. 取值 validate | update | create | create-drop-->
+                <entry key="hibernate.hbm2ddl.auto" value="update"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!--开启事务注解 默认名字就是transactionManager-->
+    <tx:annotation-driven/>
+
+    <!--开启注解配置类-->
+    <context:annotation-config/>
+
+</beans>

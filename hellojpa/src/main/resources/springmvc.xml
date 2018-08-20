@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                                       http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd
+                                       http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.jxedu">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+      <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+          <property name="suffix" value=".html"/>
+          <property name="prefix" value="/WEB-INF/template/"/>
+          <property name="cacheable" value="false"/>
+          <property name="templateMode" value="HTML"/>
+      </bean>
+
+      <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+          <property name="templateResolver" ref="templateResolver"/>
+          <property name="enableSpringELCompiler" value="true"/>
+      </bean>
+
+     <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+         <property name="templateEngine" ref="templateEngine"/>
+         <property name="characterEncoding" value="UTF-8"/>
+       <!--  <property name="viewNames" value="*.html,*.xhtml"/>-->
+     </bean>
+
+     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+     </bean>
+    <context:annotation-config/>
+   <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="defaultCharset" value="UTF-8"/>
+                <property name="supportedMediaTypes">
+                     <list>
+                         <value>
+                             application/json;charset=UTF-8
+                         </value>
+                         <value>
+                             text/html;charset=utf-8
+                         </value>
+                     </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+   </mvc:annotation-driven>
+    <mvc:default-servlet-handler/>
+
+</beans>

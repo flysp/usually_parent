@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TestVo测试 Thymeleaf</title>
+    <script th:inline="javascript">
+        console.log("Welcom admin")
+
+    </script>
+</head>
+<body>
+   <table  border="1">
+         <thead>
+             <th>Thymeleaf测试----</th>
+         </thead>
+       <tbody>
+
+          <tr th:each="test:${test}">
+              <td th:text="${test.name}"></td>
+              <!--判断成绩-->
+              <td th:if="${test.Score} gt 0 and ${test.Score} < 60">差</td>
+              <td th:if="${test.Score} >= 60 and ${test.Score} <= 70">中</td>
+              <td th:if="${test.Score} >70 and ${test.Score} <=80">良</td>
+              <td th:if="${test.Score} >80 and ${test.Score} <= 90">优</td>
+              <td th:if="${test.Score} > 90 and ${test.Score}  <= 100">超级优秀</td>
+              <td th:text="${#dates.format(test.birthday,'yyyy-MM-dd HH:mm:ss')}"></td>
+              <td th:text="${#strings.length(test.name)}"></td>
+              <td th:if="${#strings.length(test.name) >3 } " th:text="${#strings.substring(test.name,0,4) + '…'}"></td>
+           </tr>
+       <!--  <tr th:each="test:${test}">
+             &lt;!&ndash;判断成绩&ndash;&gt;
+             <td th:if="${test.Score} gt 0 and ${test.Score} lt 60">差</td>
+             <td th:if="${test.Score} ge 60 and ${test.Score} le 70">中</td>
+             <td th:if="${test.Score} gt 70 and ${test.Score} le 80">良</td>
+             <td th:if="${test.Score} gt 80 and ${test.Score} le 90">优</td>
+             <td th:if="${test.Score} gt 90 and ${test.Score} le 100">超级优秀</td>
+         </tr>-->
+       <br/>
+       <tr th:each="test:${test}" >
+           <!--判断成绩 一般只有两种情况的时候可以使用这种方法 -->
+           <td th:if="${test.Score} > 0 and ${test.Score} <60">差</td>
+           <!--除了这些条件之外的-->
+           <td th:unless="${test.Score} >0 and ${test.Score} <60">及格</td>
+       </tr>
+       <tr th:each="test:${test}">
+           <td th:switch="${test.male}">
+               <span th:case="1">男</span>
+               <span th:case="2">女</span>
+               <!--其他情况-->
+               <span th:case="*">未知</span>
+           </td>
+       </tr>
+       </tbody>
+   </table>
+  <div th:include="bottom"></div>
+    |||||||||||||
+   <!--绝对路径 获取某一块元素-->
+   <div th:include="bottom::footer"></div>
+  <span th:utext="${html}"></span>
+<hr/>
+<th:block th:each="mylist,iterStat:${list}">
+    <span th:text="${mylist}"></span>
+    <br/>
+    ******************
+    <br/>
+     <th:block th:if="${iterStat.index} >=1">
+         <span th:text="${mylist}"></span>
+     </th:block>
+</th:block>
+<hr/>
+下拉框
+<div>
+    <select name="subId" id="subId" lay-verify="">
+        <option th:value="请选择"></option>
+      <!--  <option th:each="channelsub:${subchannels}" th:selected="${channelsub.id == subId}"    th:value="${channelsub.id}" th:text="${channelsub.name}"></option>-->
+    </select>
+</div>
+</body>
+</html>
